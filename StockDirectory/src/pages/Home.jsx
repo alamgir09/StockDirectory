@@ -1,12 +1,3 @@
-/* This is will contain the 15 stock tickers
-
-Display them as either 
-    - Tables
-    - Tiles
-    - Cards
-
-    */
-
 import React from 'react';
 import StockContainer from '../components/StockContainer';
 

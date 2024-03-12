@@ -3,8 +3,8 @@ import { ALPHA_VANTAGE_API } from '../../config';
 import { useNavigate } from 'react-router-dom';
 import './StockCard.css';
 
-const StockCard = ({ symbol = "$" }) => {
-    symbol = "IBM";
+const StockCard = ({ symbol = "IBM" }) => {
+    // symbol = "IBM";
     const [price, setPrice] = useState(0);
     const [percentageChange, setPercentageChange] = useState(0);
 
@@ -23,7 +23,7 @@ const StockCard = ({ symbol = "$" }) => {
     const changeColor = percentageChange >= 0 ? '#4caf50' : '#f44336'; // Green for positive, red for negative
 
     const handleStockDetails = (symbol) => {
-        console.log("clicked");
+        console.log("clicked", symbol);
         // Route to stock details page
         navigate(`/stock/details/${symbol}`)
       }

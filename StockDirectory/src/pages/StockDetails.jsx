@@ -4,10 +4,12 @@ import BackButton from '../components/BackButton';
 import './StockDetails.css'; // Ensure you have this CSS file for styling
 
 const StockDetails = ({ symbol = "IBM" }) => {
-    const [companyOverview, setCompanyOverview] = useState(null);
+    const [companyOverview, setCompanyOverview] = useState("Loading...");
     const [historicalPrices, setHistoricalPrices] = useState([]);
-    const [price, setPrice] = useState(0);
+    const [price, setPrice] = useState("Loading..");
     const [percentageChange, setPercentageChange] = useState(0);
+
+    console.log("The symbol is: ", symbol);
 
     // Fetch basic stock data
     useEffect(() => {
@@ -24,7 +26,7 @@ const StockDetails = ({ symbol = "IBM" }) => {
     useEffect(() => {
         const fetchCompanyOverview = async () => {
             try {
-                const response = await fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${ALPHA_VANTAGE}`);
+                const response = await fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${ALPHA_VANTAGE_API}`);
                 const data = await response.json();
                 setCompanyOverview(data);
             } catch (error) {
@@ -37,6 +39,7 @@ const StockDetails = ({ symbol = "IBM" }) => {
                 const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${ALPHA_VANTAGE_API}`);
                 const data = await response.json();
                 const pricesSeries = data['Time Series (Daily)'];
+                console.log(data['Time Series (Daily)']);
                 const formattedPrices = Object.keys(pricesSeries).map(date => ({
                     date,
                     close: pricesSeries[date]['4. close'],
@@ -49,6 +52,7 @@ const StockDetails = ({ symbol = "IBM" }) => {
                     const currentClose = parseFloat(formattedPrices[i].close);
                     const prevClose = parseFloat(formattedPrices[i + 1].close);
                     formattedPrices[i].change = (((currentClose - prevClose) / prevClose) * 100).toFixed(2) + '%';
+                    // console.log("Change: ", formattedPrices[i].change, "Type is", typeof(formattedPrices[i].change));
                 }
                 
                 setHistoricalPrices(formattedPrices);
@@ -63,23 +67,31 @@ const StockDetails = ({ symbol = "IBM" }) => {
 
     const changeColor = percentageChange >= 0 ? '#4caf50' : '#f44336'; // Green for positive, red for negative
 
+    // Handles color change for historical prices
+    const handleColorChange = (change) => {
+        if (change === null) {
+            return "#FFA500";
+        }
+        return change[0] != "-" ? '#4caf50' : '#f44336';
+    }
+
     return (
         <div className="stock-details">
             <BackButton />
             <div className="stock-header">
                 <h1>{symbol} - {companyOverview?.Name || 'N/A'}</h1>
                 <div className="stock-price" style={{ color: changeColor }}>
-                    <span>Current Price: ${price}</span>
-                    <span>Change: {percentageChange}</span>
+                    <span>${price}</span>
+                    <span>{percentageChange}</span>
                 </div>
             </div>
             <div className="company-overview">
                 <h2>Company Overview</h2>
-                {/* Display company overview details here */}
+                    <p>{companyOverview?.Description || 'N/A'}</p>
             </div>
             <div className="historical-prices">
                 <h2>Historical Prices</h2>
-                <table>
+                <table className="historical-prices-table text-center">
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -94,7 +106,7 @@ const StockDetails = ({ symbol = "IBM" }) => {
                                 <td>{item.date}</td>
                                 <td>${item.close}</td>
                                 <td>{item.volume}</td>
-                                <td style={{ percentageChange >= 0 ? '#4caf50' : '#f44336'} {item.change}}</td>
+                                <td style={{color: handleColorChange(item.change)}}> {item.change || "N/A"}</td>
                             </tr>
                         ))}
                     </tbody>

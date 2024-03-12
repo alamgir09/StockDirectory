@@ -1,0 +1,60 @@
+/* Styles for the stock header */
+.stock-header {
+    font-size: larger;
+}
+
+.stock-header span {
+    font-size: 70px;
+    padding: 50px;
+}
+
+/* Add border to table cells */
+table td {
+    border-bottom: 1px solid #ddd; /* Light grey border */
+}
+
+table td tbody {
+    border-bottom: 3px solid #ddd; /* Light grey border */
+}
+
+/* Styles for the stock details section */
+.stock-details {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Styles for the stock header, company overview, and historical prices sections */
+.stock-header,
+.company-overview,
+.historical-prices {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Styles for the historical prices table */
+.historical-prices-table {
+    margin: auto;
+    width: 70%;
+    border-collapse: collapse;
+}
+
+.historical-prices-table th,
+.historical-prices-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.historical-prices-table th {
+    background-color: #5a1d1d;
+}
+
+/* Change the color of every even row to a dark maroon */
+.historical-prices-table tr:nth-child(even) {
+    background-color: #302929;
+}
+
+.historical-prices-table tr:hover {
+    background-color: #2d0e0e;
+}
